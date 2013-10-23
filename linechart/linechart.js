@@ -1,7 +1,7 @@
 var data = [ 
-	[1,2,3],
-	[9,3,1],
-	[2,10,1]
+	[1,2,3,12],
+	[9,20,1,-5],
+	[2,10,1,16]
 ];
 var dataHeaders = ["a", "b", "c", "d", "e"];
 
@@ -16,14 +16,13 @@ var svg = d3.select("body").append("svg")
   	.attr("transform", "translate("+margin.left+","+margin.top+")");
 
 //calculate min and max
-var min = Number.MAX_VALUE;
-var max = Number.MIN_VALUE;
-for(var i=0; i<data.length; i++){
-	if(d3.min(data[i]) < min)
-		min = d3.min(data[i]);
-	if(d3.max(data[i]) > max)
-		max = d3.max(data[i]);
-}
+var max = d3.max(data, function(data){
+	return d3.max(data);
+});
+
+var min = d3.min(data, function(data){
+	return d3.min(data);
+});
 
 var y = d3.scale.linear()
 	.domain([min, max])
@@ -34,6 +33,9 @@ var x = d3.scale.ordinal()
 	.domain(d3.range(dataHeaders.length))
 	.rangeBands([0, width]);
 
+var color = d3.scale.category10()
+	.domain(data.length);
+
 //horizontal lines
 svg.selectAll("line")
 	.data(y.ticks(10))
@@ -42,6 +44,7 @@ svg.selectAll("line")
 	.attr("x2", width)
 	.attr("y1", y)
 	.attr("y2", y)
+	.attr("class", "horizontal-line")
 	.style("stroke", "#ccc");
 
 //function to calculate the x,y points of each line
@@ -54,5 +57,6 @@ var lineFunction = d3.svg.line()
 var paths = svg.selectAll(".paths")
 	.data(data)
   .enter().append("path")
-  	.attr("d", function(d){ console.log(lineFunction(d)); return lineFunction(d); })
+  	.attr("d", function(d){return lineFunction(d);})
+	.attr("stroke", function(d,i){return color(i);})
   	.attr("fill", "none");
