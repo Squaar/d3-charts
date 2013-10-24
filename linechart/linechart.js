@@ -1,11 +1,13 @@
 var data = [ 
 	[1,2,3,12],
 	[9,20,1,-5],
-	[2,10,1,16]
+	[2,10,1,16],
+	[12,12,12,14]
 ];
-var dataHeaders = ["a", "b", "c", "d", "e"];
+var xData = [1,2,3,4,5,6,7,8,9,10];
+xData = xData.slice(0, data[0].length);
 
-var margin = {top: 30, right: 30, bottom: 30, left:30},
+var margin = {top: 40, right: 30, bottom: 30, left:40},
 	width = 600 - margin.left - margin.right,
 	height = 400 - margin.top - margin.bottom;
 
@@ -30,8 +32,8 @@ var y = d3.scale.linear()
 	
 
 var x = d3.scale.ordinal()
-	.domain(d3.range(dataHeaders.length))
-	.rangeBands([0, width]);
+	.domain(d3.range(xData.length))
+	.rangePoints([0, width]);
 
 var color = d3.scale.category10()
 	.domain(data.length);
@@ -60,3 +62,19 @@ var paths = svg.selectAll(".paths")
   	.attr("d", function(d){return lineFunction(d);})
 	.attr("stroke", function(d,i){return color(i);})
   	.attr("fill", "none");
+
+//draw the y axis
+var yAxis = svg.append("g")
+	.attr("class", "axis")
+  .call(d3.svg.axis().orient("left").scale(y));
+  //.append("text")
+	//.attr("text-anchor", "middle")
+	//.attr("y", -20)
+	//.attr("x", 5)
+	//.text(String);
+
+//draw the x axis
+var xAxis = svg.append("g")
+	.attr("class", "axis")
+	.attr("transform", "translate(0, " + height + ")")
+  .call(d3.svg.axis().orient("bottom").scale(x));
