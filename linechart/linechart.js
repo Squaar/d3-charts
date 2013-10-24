@@ -2,7 +2,7 @@ var data = [ 							//each sub array is a seperate line
 	[1,2,3,12],
 	[9,20,1,-5],
 	[2,10,1,16],
-	[12,12,12,14]
+	[12,12,12,12]
 ];
 var xData = [1,2,3,4,5,6,7,8,9,10];		//labels on the x axis
 var datasets = ["a", "b", "c", "d"];	// names of the datasets, these are displayed in the key
@@ -52,7 +52,7 @@ var key = svg.append("g").selectAll("key")
 	.data(datasets)
   .enter().append("rect")
   	.attr("x", chartWidth + 10)
-  	.attr("y", function(d,i){return height/2 - (squareHeight+keySpacing)*i ;})
+  	.attr("y", function(d,i){return height/2 - (squareHeight+keySpacing)*-i -keyHeight/2;})
   	.attr("width", 15)
   	.attr("height", 15)
   	.attr("fill", function(d,i){return color(i);})
