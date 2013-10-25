@@ -5,7 +5,7 @@ var data = [ 							//each sub array is a seperate line
 	[12,12,12,12]
 ];
 var xData = [1,2,3,4,5,6,7,8,9,10];		//labels on the x axis
-var datasets = ["a", "b", "c", "d"];	// names of the datasets, these are displayed in the key
+var datasets = ["a", "b", "c", "d", "e", "f", "g"];	// names of the datasets, these are displayed in the key
 xData = xData.slice(0, data[0].length);
 
 var margin = {top: 40, right: 30, bottom: 30, left:40},
@@ -48,7 +48,9 @@ var keySpacing = 2,
 	keyHeight = (squareHeight+keySpacing)*datasets.length
 
 //create key
-var key = svg.append("g").selectAll("key")
+var key = svg.append("g");
+
+key.selectAll("keySquares")
 	.data(datasets)
   .enter().append("rect")
   	.attr("x", chartWidth + 10)
@@ -56,10 +58,14 @@ var key = svg.append("g").selectAll("key")
   	.attr("width", 15)
   	.attr("height", 15)
   	.attr("fill", function(d,i){return color(i);})
-  .append("text")
+
+key.selectAll("keyText")
+	.data(datasets)
+  .enter().append("text")
   	.attr("text-anchor", "middle")
-	.attr("y", 0)
-	.attr("x", 5)
+	.attr("y", function(d,i){return height/2 - (squareHeight+keySpacing)*-i -keyHeight/2;})
+	.attr("x", chartWidth + squareHeight + 20)
+	.attr("dy", 10)
   	.text(String);
 
 //horizontal lines
