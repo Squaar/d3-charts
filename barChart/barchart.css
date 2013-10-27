@@ -1,0 +1,28 @@
+
+body{
+	background-color: black;
+}
+
+svg{
+	background-color: white;
+	font: 12px sans-serif;
+}
+
+.chart rect{
+	fill: steelblue;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+
+.horizontal-line{
+	shape-rendering: crispEdges;
+}
+
+.chart text{
+	font: 10px sans-serif;
+	fill: white;
+}
+
+.chart .rule{
+	fill:black;
+}

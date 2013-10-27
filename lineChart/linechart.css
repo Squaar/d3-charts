@@ -1,0 +1,23 @@
+body{
+	background-color: black;
+}
+
+svg{
+	background-color: white;
+	font: 12px sans-serif;
+}
+
+path{
+	fill: none;
+	stroke-opacity: 1;
+	stroke-width: 3;
+	
+}
+
+.horizontal-line, rect{
+	shape-rendering: crispEdges;
+}
+
+.axis text{
+	text-shadow: 0 1px 0 white;
+}	
