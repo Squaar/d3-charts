@@ -18,37 +18,52 @@ var svg = d3.select("body").append("svg")
 	.append("g")
 		.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-var innerRadius = d3.min([width, height]) / 10;
-var outerRadius = d3.min([width, height]) * 9/10;
+var innerRadius = 0;
+var outerRadius = d3.min([width, height]);
 
-var axes = {};
+var axes = [];
 
 for(var i=0; i<dataHeaders.length; i++){
 	axes[i] = d3.scale.linear()
-		.domain(d3.extent(data, function(j){ return j[i];}))
-		.range([-innerRadius, -outerRadius]);
+		.domain(d3.extent(data[i]))
+		.range([innerRadius, outerRadius]);
 }
 
-var radius = d3.scale.linear()
-		.range([0, height/2-10]);
-
-var angle = d3.scale.linear()
+var theta = d3.scale.linear()
+		.domain(d3.range(dataHeaders.length))
 		.range([0, 2*Math.PI]);
 
-// var stack = d3.layout.stack()
-// 		.offset("zero")
-// 		.values(
+var x = function(radius, theta){
+	return radius*Math.cos(theta);
+};
+var y = function(radius, theta){
+	return radius*Math.sin(theta);
+};
 
-svg.selectAll(".axis")
-		.data(dataHeaders)
-	.enter().append("g")
-		.attr("class", "axis")
-		//.attr("transform", function(d) { return "rotate(" + angle(d) * 180 / Math.PI + ")"; })
-	.each(function(d,i){ d3.select(this).call(d3.svg.axis()
-		.orient("left")
-		.scale(axes[i])); })
-	.append("text")
-		.attr("y", -outerRadius+6)
-		.attr("text-anchor", "middle")
-		.text(String);
-alert(axes.length);
+//function to calculate the x,y points of each line
+var lineFunction = d3.svg.line()
+	.x(function(d,i){ return x(axes[i](d), theta(i));})
+	.y(function(d,i){ return y(axes[i](d), theta(i));})
+	.interpolate("linear");
+
+//make the paths
+var paths = svg.selectAll(".paths")
+	.data(data)
+  .enter().append("path")
+  	.attr("d", function(d){ return lineFunction(d); })
+  	.attr("fill", "none");
+
+// svg.selectAll(".axis")
+// 		.data(dataHeaders)
+// 	.enter().append("g")
+// 		.attr("class", "axis")
+// 		.attr("transform", function(d,i) { return "translate(" + x(width/2 + innerRadius, theta(i)) + "," + y(height/2 + innerRadius, theta(i)) + ")rotate(" + theta(i) * 180 / Math.PI + ")"; })
+// 		//.attr("transform", function(d,i) { return "rotate(" + theta(i) * 180 / Math.PI + ")"; })
+// 		//.attr("transform", function(d,i) { return "translate(" + x(width/2 + innerRadius, theta(i)) + "," + y(height/2 + innerRadius, theta(i)) + ")";})
+// 	.each(function(d,i){ d3.select(this).call(d3.svg.axis()
+// 		.orient("left")
+// 		.scale(axes[i]));})
+// 	.append("text")
+// 		.attr("y", -outerRadius+6)
+// 		.attr("text-anchor", "middle")
+// 		.text(String);

@@ -1,0 +1,17 @@
+path{
+	stroke: steelblue;
+	fill: none;
+}
+
+.chart text{
+	font: 10px sans-serif;
+	fill: white;
+}
+
+body{
+	background-color: black;
+}
+
+svg{
+	background-color: white;
+}
