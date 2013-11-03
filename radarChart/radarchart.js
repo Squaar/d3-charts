@@ -2,11 +2,11 @@
 //http://bl.ocks.org/jeffthink/1630683
 
 
-var dataHeaders = ["colA", "colB", "colC"];
+var dataHeaders = ["colA", "colB", "colC","d","e","f"];
 var data = [
-	[1,2,3],
-	[2,4,6],
-	[4,8,12]
+	[1,2,3,4,5,6],
+	[2,4,6,8,10,12],
+	[4,8,12,16,20,24]
 ];
 
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -19,7 +19,7 @@ var svg = d3.select("body").append("svg")
 	.append("g")
 		.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-var innerRadius = 100;
+var innerRadius = 50;
 var outerRadius = d3.min([width/2, height/2]);
 
 var axes = [];
@@ -30,21 +30,27 @@ for(var i=0; i<dataHeaders.length; i++){
 		.range([innerRadius, outerRadius]);
 }
 
+//REMEMBER TO REMOVE COLORS
 var color = d3.scale.category10()
 	.domain(data.length);
 
-var theta = d3.scale.linear()
-		.domain(d3.range(dataHeaders.length))
-		.range([0, 2*Math.PI]);
+// var theta = d3.scale.linear()
+// 		.domain(d3.range(dataHeaders.length))
+// 		.range([0, 2*Math.PI]);
 
-var x = function(radius, theta){
-	return radius*Math.cos(theta) + width/2;
-};
-var y = function(radius, theta){
-	return radius*Math.sin(theta) + height/2;
-};
+// var x = function(radius, theta){
+// 	return radius*Math.cos(theta) + width/2;
+// };
+// var y = function(radius, theta){
+// 	return radius*Math.sin(theta) + height/2;
+// };
 
 
+//append first value of each line to end of each line
+//to create a complete loop
+for(var i=0; i<data.length; i++){
+	data[i][data[i].length] = data[i][0];
+}
 
 //function to calculate the x,y points of each line
 // var lineFunction = d3.svg.line()
@@ -53,9 +59,13 @@ var y = function(radius, theta){
 // 	.interpolate("linear");
 
 var lineFunction = d3.svg.line.radial()
-	.radius(function(d,i){return axes[i](d);})
+	.radius(function(d,i){
+		if(i == dataHeaders.length) i = 0;
+		return axes[i](d);})
 	//.angle(function(d,i){return theta(i)})
-	.angle(function(d,i){return (i/(dataHeaders.length)) * 2*Math.PI;})
+	.angle(function(d,i){
+		if(i == dataHeaders.length) i=0;
+		return (i/(dataHeaders.length)) * 2*Math.PI;})
 	.interpolate("linear");
 
 //make the paths
