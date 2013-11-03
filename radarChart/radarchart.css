@@ -1,4 +1,4 @@
-path{
+.data-path{
 	fill: none;
 	stroke-width: 5px;
 }
@@ -14,4 +14,10 @@ body{
 
 svg{
 	background-color: white;
+}
+
+.axis line, .axis path{
+	fill: none;
+	stroke: black;
+
 }
