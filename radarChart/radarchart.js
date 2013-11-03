@@ -5,8 +5,8 @@
 var dataHeaders = ["colA", "colB", "colC"];
 var data = [
 	[1,2,3],
-	[9,3,1],
-	[5,7,3]
+	[2,4,6],
+	[4,8,12]
 ];
 
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -19,7 +19,7 @@ var svg = d3.select("body").append("svg")
 	.append("g")
 		.attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
 
-var innerRadius = 0;
+var innerRadius = 100;
 var outerRadius = d3.min([width/2, height/2]);
 
 var axes = [];
@@ -44,6 +44,8 @@ var y = function(radius, theta){
 	return radius*Math.sin(theta) + height/2;
 };
 
+
+
 //function to calculate the x,y points of each line
 // var lineFunction = d3.svg.line()
 // 	.x(function(d,i){ return x(axes[i](d), theta(i));})
@@ -53,10 +55,7 @@ var y = function(radius, theta){
 var lineFunction = d3.svg.line.radial()
 	.radius(function(d,i){return axes[i](d);})
 	//.angle(function(d,i){return theta(i)})
-	.angle(function(d,i){
-		if(i === dataHeaders.length+1)
-			i=0;
-		return (i/(dataHeaders.length+1)) * 2*Math.PI;})
+	.angle(function(d,i){return (i/(dataHeaders.length)) * 2*Math.PI;})
 	.interpolate("linear");
 
 //make the paths
@@ -82,3 +81,11 @@ var paths = svg.selectAll(".paths")
 // 		.attr("y", -outerRadius+6)
 // 		.attr("text-anchor", "middle")
 // 		.text(String);
+
+
+svg.append("rect")
+	.attr("x", width/2 - 2)
+	.attr("y", height/2 -2)
+	.attr("width", 4)
+	.attr("height", 4)
+	.attr("fill", "black");
