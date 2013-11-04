@@ -1,6 +1,7 @@
 .data-path{
 	fill: none;
 	stroke-width: 5px;
+	stroke: steelblue;
 }
 
 .chart text{
